@@ -1,0 +1,241 @@
+LAMMPS (3 Mar 2020)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
+  using 1 OpenMP thread(s) per MPI task
+#Lammps 2009 input file generate by DFF
+
+units          real
+atom_style     full
+boundary       p p p
+
+pair_style     lj/cut/coul/long     12.0
+pair_modify    mix arithmetic
+pair_modify    tail yes
+kspace_style   pppm 1.0e-4
+dielectric     1.0
+special_bonds  lj 0.0 0.0 1.0 coul 0.0 0.0 0.5
+bond_style     class2
+angle_style    class2
+dihedral_style opls
+improper_style harmonic
+
+read_data      miniC_paa.data
+  orthogonal box = (0 0 0) to (17.812 26.2932 24.1386)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  476 atoms
+  scanning bonds ...
+  6 = max bonds/atom
+  scanning angles ...
+  15 = max angles/atom
+  scanning dihedrals ...
+  60 = max dihedrals/atom
+  scanning impropers ...
+  5 = max impropers/atom
+  reading bonds ...
+  856 bonds
+  reading angles ...
+  2752 angles
+  reading dihedrals ...
+  7268 dihedrals
+  reading impropers ...
+  244 impropers
+  6 = max # of 1-2 neighbors
+  15 = max # of 1-3 neighbors
+  72 = max # of 1-4 neighbors
+  54 = max # of special neighbors
+  special bonds CPU = 0.00382701 secs
+  read_data CPU = 0.0205588 secs
+#pair_coeff  6 10 0.0399  2.6729
+pair_coeff  6 10 0.1  2.42
+#pair_coeff  5  7 0.0000  1.3050
+#pair_coeff  5  7 0.3500  1.200
+#pair_coeff  1  7 0.1077  3.0784
+#pair_coeff  1  9 0.0854  3.1490
+include LJ4paa
+pair_coeff 5 7 0.80 2.0
+
+group surf type 7 9 10 11
+432 atoms in group surf
+fix 1 surf setforce 0.0 0.0 0.0
+#group surf1 id 1:108
+#fix 1 surf1 setforce 0.0 0.0 0.0
+#group surf2 id 117:224
+#fix 2 surf2 setforce 0.0 0.0 0.0
+#group surf3 id 233:340
+#fix 3 surf3 setforce 0.0 0.0 0.0
+#group surf4 id 349:456
+#fix 4 surf4 setforce 0.0 0.0 0.0
+#
+variable a1 equal 265
+variable a2 equal 348
+variable a3 equal 316
+#variable a4 equal 355
+variable a4 equal 347
+variable a5 equal 355
+#
+group b1 id ${a1} ${a2}
+group b1 id 265 ${a2}
+group b1 id 265 348
+2 atoms in group b1
+compute b1 b1 pair/local dist
+compute Ave_b1 b1 reduce ave c_b1
+group b2 id ${a3} ${a4}
+group b2 id 316 ${a4}
+group b2 id 316 347
+2 atoms in group b2
+compute b2 b2 pair/local dist
+compute Ave_b2 b2 reduce ave c_b2
+group b3 id ${a3} ${a5}
+group b3 id 316 ${a5}
+group b3 id 316 355
+2 atoms in group b3
+compute b3 b3 pair/local dist
+compute Ave_b3 b3 reduce ave c_b3
+#
+thermo_style custom step temp press pe density vol c_Ave_b1 c_Ave_b2 c_Ave_b3
+#thermo_style custom step temp press pe density vol
+thermo         1
+
+#dump           2 all xyz 1 min.xyz
+#dump_modify    2 sort id element C01 C02 C03 H04 H05 O06 O07 O08 O09 Ti10 Ti11
+
+min_style      cg
+minimize       1e-6 1e-8 1000 1000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (src/min.cpp:190)
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (src/kspace.cpp:332)
+  G vector (1/distance) = 0.243926
+  grid = 12 15 15
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.019344
+  estimated relative force accuracy = 5.8254e-05
+  using double precision FFTW3
+  3d grid and FFT values/proc = 9196 2700
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+  binsize = 7, bins = 3 4 4
+  4 neighbor lists, perpetual/occasional/extra = 1 3 0
+  (1) pair lj/cut/coul/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+  (2) compute pair/local, occasional, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+  (3) compute pair/local, occasional, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+  (4) compute pair/local, occasional, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+WARNING: Inconsistent image flags (src/domain.cpp:785)
+Per MPI rank memory allocation (min/avg/max) = 37.32 | 37.32 | 37.32 Mbytes
+Step Temp Press PotEng Density Volume c_Ave_b1 c_Ave_b2 c_Ave_b3 
+       0            0    111751.31    58030.857    1.7330897    11304.939    1.9571179    2.4688424    1.3250159 
+       1            0      84834.4    56886.322    1.7330897    11304.939    1.9587574    2.4648507    1.4472285 
+       2            0    77031.953    56543.214    1.7330897    11304.939    1.9637519    2.4596185    1.5704531 
+       3            0    75384.723    56465.474    1.7330897    11304.939    1.9792854    2.5114999    1.6861912 
+       4            0    74493.919    56409.428    1.7330897    11304.939    1.9764179    2.6184119    1.7137699 
+       5            0    73485.791    56401.169    1.7330897    11304.939    1.9423735    2.6448953    1.7191048 
+       6            0    72930.578    56393.583    1.7330897    11304.939    1.9270292    2.6998439    1.7649558 
+       7            0    73218.117     56384.72    1.7330897    11304.939    1.9443807    2.7074693    1.7768383 
+       8            0    73380.781    56382.604    1.7330897    11304.939    1.9542918    2.7077012     1.777848 
+       9            0    72600.241    56376.204    1.7330897    11304.939    1.9556862    2.7148535     1.781201 
+      10            0    71799.071    56365.038    1.7330897    11304.939    1.9988198    2.7364032    1.7944987 
+      11            0    71059.276    56357.324    1.7330897    11304.939    2.0016314    2.7570833    1.8146005 
+      12            0    71446.516    56352.373    1.7330897    11304.939    2.0329235    2.7971398    1.8415767 
+      13            0    71272.837    56346.968    1.7330897    11304.939    2.0494603    2.8369824    1.8884428 
+      14            0    71390.382    56344.676    1.7330897    11304.939    2.0718261    2.8520953    1.9109561 
+      15            0    70911.062    56341.805    1.7330897    11304.939    2.0838102    2.8747792    1.9147613 
+      16            0    70968.435    56340.036    1.7330897    11304.939    2.0975814    2.8723728     1.927188 
+      17            0    70750.135    56338.616    1.7330897    11304.939    2.1078677    2.8791866    1.9258901 
+      18            0    70740.433    56337.663    1.7330897    11304.939    2.1181555    2.8795031    1.9286246 
+      19            0    70474.705    56336.775    1.7330897    11304.939     2.115282    2.8819775    1.9292867 
+      20            0    70646.117    56335.779    1.7330897    11304.939    2.1198096    2.8885923    1.9276266 
+      21            0    70890.431    56335.016    1.7330897    11304.939    2.1213306    2.8860194    1.9361073 
+      22            0    70906.258     56333.87    1.7330897    11304.939     2.122536    2.8989719    1.9389181 
+      23            0    70605.873    56332.402    1.7330897    11304.939    2.1195407    2.9108025    1.9533868 
+      24            0    70349.249     56331.76    1.7330897    11304.939    2.1118718     2.916074    1.9638865 
+      25            0    70465.524    56331.258    1.7330897    11304.939    2.1148232    2.9213036    1.9703654 
+      26            0    70572.149    56330.656    1.7330897    11304.939    2.1175553    2.9235101    1.9744163 
+      27            0    70532.598    56330.127    1.7330897    11304.939     2.116052    2.9231252    1.9780805 
+      28            0    70607.919    56329.841    1.7330897    11304.939    2.1180435    2.9252242    1.9784118 
+      29            0    70520.405    56329.363    1.7330897    11304.939    2.1105743    2.9287151    1.9795352 
+      30            0    70456.956    56328.647    1.7330897    11304.939    2.0989403    2.9270668    1.9874038 
+      31            0    70372.978    56328.012    1.7330897    11304.939    2.0906201    2.9333036    1.9842189 
+      32            0    70297.121    56327.091    1.7330897    11304.939    2.0706468    2.9342332    1.9850597 
+      33            0    70575.595    56326.424    1.7330897    11304.939    2.0646739    2.9318906    1.9900022 
+      34            0    70664.629     56325.38    1.7330897    11304.939    2.0418557    2.9375751    1.9945936 
+      35            0     70649.02    56323.912    1.7330897    11304.939    2.0160829    2.9451035    2.0056392 
+      36            0    70520.087    56322.819    1.7330897    11304.939    1.9984826    2.9457647    2.0156699 
+      37            0    70679.926    56322.124    1.7330897    11304.939    1.9963094    2.9495676    2.0187986 
+      38            0    70666.801    56321.348    1.7330897    11304.939    1.9850065    2.9522759    2.0243953 
+      39            0    70784.869    56320.459    1.7330897    11304.939    1.9782533    2.9525001    2.0375018 
+      40            0    70591.267    56319.869    1.7330897    11304.939    1.9687756    2.9588315     2.043999 
+      41            0      70705.7    56319.266    1.7330897    11304.939    1.9679697    2.9646613    2.0529483 
+      42            0     70732.01    56319.021    1.7330897    11304.939    1.9640614    2.9649396    2.0582127 
+      43            0    70886.046     56318.86    1.7330897    11304.939    1.9646204    2.9666752     2.060304 
+      44            0    70877.747    56318.659    1.7330897    11304.939    1.9608223    2.9699943      2.06048 
+      45            0    70916.865    56318.484    1.7330897    11304.939    1.9590297    2.9708334    2.0626565 
+      46            0    70834.016     56318.33    1.7330897    11304.939    1.9532789    2.9737919    2.0629247 
+      47            0    70864.257    56318.206    1.7330897    11304.939    1.9522716    2.9774937    2.0614466 
+      48            0    70860.256    56318.158    1.7330897    11304.939    1.9500335    2.9775013    2.0619911 
+Loop time of 0.447325 on 1 procs for 48 steps with 476 atoms
+
+98.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+         58030.8568451      56318.2061617      56318.1577234
+  Force two-norm initial, final = 7964.49 8.86608
+  Force max component initial, final = 3251.76 2.19074
+  Final line search alpha, max atom move = 0.0142793 0.0312823
+  Iterations, force evaluations = 48 92
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.26052    | 0.26052    | 0.26052    |   0.0 | 58.24
+Bond    | 0.12361    | 0.12361    | 0.12361    |   0.0 | 27.63
+Kspace  | 0.040423   | 0.040423   | 0.040423   |   0.0 |  9.04
+Neigh   | 0.0071185  | 0.0071185  | 0.0071185  |   0.0 |  1.59
+Comm    | 0.0031302  | 0.0031302  | 0.0031302  |   0.0 |  0.70
+Output  | 0.0098721  | 0.0098721  | 0.0098721  |   0.0 |  2.21
+Modify  | 0.0002728  | 0.0002728  | 0.0002728  |   0.0 |  0.06
+Other   |            | 0.002378   |            |       |  0.53
+
+Nlocal:    476 ave 476 max 476 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5016 ave 5016 max 5016 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    133328 ave 133328 max 133328 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 133328
+Ave neighs/atom = 280.101
+Ave special neighs/atom = 32.5882
+Neighbor list builds = 1
+Dangerous builds = 0
+write_data  mini1-paa.data
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (src/kspace.cpp:332)
+  G vector (1/distance) = 0.243926
+  grid = 12 15 15
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.019344
+  estimated relative force accuracy = 5.8254e-05
+  using double precision FFTW3
+  3d grid and FFT values/proc = 9196 2700
+
+Total wall time: 0:00:00

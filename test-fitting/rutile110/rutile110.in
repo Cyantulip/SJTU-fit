@@ -1,0 +1,36 @@
+#Lammps 2009 input file generate by DFF
+
+units          real
+atom_style     full
+boundary       p p p
+
+pair_style     lj/cut/coul/long     12.0
+pair_modify    mix arithmetic
+pair_modify    tail yes
+kspace_style   pppm 1.0e-4
+dielectric     1.0
+special_bonds  lj 0.0 0.0 1.0 coul 0.0 0.0 0.5
+bond_style     class2
+angle_style    class2
+dihedral_style opls
+improper_style harmonic
+
+read_data      rutile110.data
+
+
+velocity       all create 298.15 1166140691 mom yes rot yes dist gaussian
+
+timestep       1.0
+fix            1 all nvt temp 298.15 298.15 100.0
+
+thermo_style   custom step temp press pe
+thermo         100
+
+run            10000
+
+dump           1 all custom 1000 rutile110.dta id xu yu zu
+dump_modify    1 sort id
+
+run            10000
+write_restart  md.rst
+

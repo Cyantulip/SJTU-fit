@@ -1,0 +1,32 @@
+# DFF generated LAMMPS data file
+
+119 atoms
+214 bonds
+688 angles
+1817 dihedrals
+61 impropers
+
+11  atom types
+10  bond types
+18  angle types
+16  dihedral types
+4  improper types
+
+      0.0000      8.9060   xlo xhi
+      0.0000     13.1466   ylo yhi
+      0.0000     24.1386   zlo zhi
+
+Masses
+
+           1     12.0110   #   C01
+           2     12.0110   #   C02
+           3     12.0110   #   C03
+           4      1.0079   #   H04
+           5      1.0079   #   H05
+           6     15.9994   #   O06
+           7     15.9994   #   O07
+           8     15.9994   #   O08
+           9     15.9994   #   O09
+          10     47.8800   #   Ti10
+          11     47.8800   #   Ti11
+

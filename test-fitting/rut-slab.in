@@ -1,0 +1,32 @@
+#Lammps 2009 input file generate by DFF
+
+units          real
+atom_style     full
+boundary       p p p
+
+pair_style     lj/cut/coul/long     12.0
+pair_modify    mix arithmetic
+pair_modify    tail yes
+kspace_style   pppm 1.0e-4
+dielectric     1.0
+special_bonds  lj 0.0 0.0 1.0 coul 0.0 0.0 0.5
+bond_style     class2
+angle_style    class2
+dihedral_style opls
+improper_style harmonic
+
+read_data      slab.data
+
+group surf id 1:108
+fix 1 surf setforce 0.0 0.0 0.0
+#
+thermo_style custom step temp press pe density vol
+thermo         1
+
+#dump           2 all xyz 1 slab.xyz
+#dump_modify    2 sort id element O1 O2 Ti3 Ti4
+
+min_style      cg
+minimize       1e-6 1e-8 1000 1000
+#write_data  mini-slab.data
+

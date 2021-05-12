@@ -1,0 +1,63 @@
+#Lammps 2009 input file generate by DFF
+
+units          real
+atom_style     full
+boundary       p p p
+
+pair_style     lj/cut/coul/long     12.0
+pair_modify    mix arithmetic
+pair_modify    tail yes
+kspace_style   pppm 1.0e-4
+dielectric     1.0
+special_bonds  lj 0.0 0.0 1.0 coul 0.0 0.0 0.5
+bond_style     class2
+angle_style    class2
+dihedral_style opls
+improper_style harmonic
+
+read_data  bin-8.data
+
+#group surf id 1:476
+#fix 1 surf setforce 0.0 0.0 0.0
+#group surf type 7 9 10 11
+#fix 1 surf setforce 0.0 0.0 0.0
+#group surf1 id 1:108
+#fix 1 surf1 setforce 0.0 0.0 0.0
+#group surf2 id 117:224
+#fix 2 surf2 setforce 0.0 0.0 0.0
+#group surf3 id 233:340
+#fix 3 surf3 setforce 0.0 0.0 0.0
+#group surf4 id 349:456
+#fix 4 surf4 setforce 0.0 0.0 0.0
+#
+#variable a1 equal 265
+#variable a2 equal 348
+#variable a3 equal 316
+##variable a4 equal 355
+#variable a4 equal 347
+#variable a5 equal 355
+#
+#group b1 id ${a1} ${a2}
+#compute b1 b1 pair/local dist
+#compute Ave_b1 b1 reduce ave c_b1
+#group b2 id ${a3} ${a4}
+#compute b2 b2 pair/local dist
+#compute Ave_b2 b2 reduce ave c_b2
+#group b3 id ${a3} ${a5}
+#compute b3 b3 pair/local dist
+#compute Ave_b3 b3 reduce ave c_b3
+#
+#thermo_style custom step temp press pe density vol c_Ave_b1 c_Ave_b2 c_Ave_b3
+thermo_style custom step temp press pe density vol
+thermo         1
+
+group mol molecule 2
+dump 3 mol custom 1000 forces id type x y z fx fy fz
+dump_modify 3 sort id
+#dump           2 all xyz 1 min.xyz
+#dump_modify    2 sort id element C01 C02 C03 H04 H05 O06 O07 O08 O09 Ti10 Ti11
+run 0
+#min_style      cg
+#minimize       1e-6 1e-8 1000 1000
+#write_data  mini2-paa.data
+
